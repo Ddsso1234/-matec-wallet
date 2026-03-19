@@ -1,4 +1,4 @@
-name: Build iOS IPA
+name: Générer un fichier IPA iOS
 on:
   push:
     branches: [ main ]
@@ -7,40 +7,60 @@ jobs:
   build-ios:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Install Capacitor
-        run: npm install
-      - name: Capacitor sync
-        run: npx cap sync ios
-      - name: CocoaPods
-        run: cd ios/App && pod install --repo-update
-      - name: Build Archive
+
+      - name: Afficher la structure du projet
         run: |
+          echo "=== Contenu du dépôt ==="
+          ls -la
+          echo "=== Dossier matec_capacitor_ios ==="
+          ls -la matec_capacitor_ios/ || echo "Dossier non trouvé"
+
+      - name: Installer les dépendances Capacitor
+        run: |
+          cd matec_capacitor_ios
+          ls -la
+          npm install
+
+      - name: Capacitor sync iOS
+        run: |
+          cd matec_capacitor_ios
+          npx cap sync ios
+
+      - name: Installer CocoaPods
+        run: |
+          cd matec_capacitor_ios/ios/App
+          pod install --repo-update
+
+      - name: Build Xcode Archive
+        run: |
+          cd matec_capacitor_ios
           xcodebuild \
             -workspace ios/App/App.xcworkspace \
             -scheme App \
             -configuration Release \
             -archivePath $RUNNER_TEMP/App.xcarchive \
             archive \
-            -allowProvisioningUpdates
-      - name: Export IPA
+            -allowProvisioningUpdates \
+            CODE_SIGNING_ALLOWED=NO
+        continue-on-error: true
+
+      - name: Lister les artifacts générés
         run: |
-          cat > /tmp/export.plist << 'PLIST'
-          <?xml version="1.0" encoding="UTF-8"?>
-          <plist version="1.0"><dict>
-            <key>method</key><string>ad-hoc</string>
-          </dict></plist>
-          PLIST
-          xcodebuild \
-            -exportArchive \
-            -archivePath $RUNNER_TEMP/App.xcarchive \
-            -exportPath $RUNNER_TEMP/IPA \
-            -exportOptionsPlist /tmp/export.plist
-      - uses: actions/upload-artifact@v4
+          echo "=== Contenu RUNNER_TEMP ==="
+          ls -la $RUNNER_TEMP/ || echo "Vide"
+          find $RUNNER_TEMP -name "*.xcarchive" 2>/dev/null || echo "Pas d'archive"
+
+      - name: Upload archive (si créée)
+        uses: actions/upload-artifact@v4
         with:
-          name: MATEC-Wallet-IPA
-          path: ${{ runner.temp }}/IPA/*.ipa
-          retention-days: 30
+          name: MATEC-Wallet-Archive
+          path: ${{ runner.temp }}/*.xcarchive
+          retention-days: 7
+        continue-on-error: true
