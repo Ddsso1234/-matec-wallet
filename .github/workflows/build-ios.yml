@@ -19,11 +19,12 @@ jobs:
         run: cd ios/App && pod install --repo-update
       - name: Build Archive
         run: |
-          xcodebuild -workspace ios/App/App.xcworkspace \
-            -scheme App -configuration Release \
-            -archivePath $RUNNER_TEMP/App.xcarchive archive \
-            CODE_SIGN_IDENTITY="${{ secrets.IOS_CODE_SIGN_IDENTITY }}" \
-            PROVISIONING_PROFILE_SPECIFIER="${{ secrets.IOS_PROVISIONING_PROFILE_NAME }}" \
+          xcodebuild \
+            -workspace ios/App/App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -archivePath $RUNNER_TEMP/App.xcarchive \
+            archive \
             -allowProvisioningUpdates
       - name: Export IPA
         run: |
@@ -31,10 +32,10 @@ jobs:
           <?xml version="1.0" encoding="UTF-8"?>
           <plist version="1.0"><dict>
             <key>method</key><string>ad-hoc</string>
-            <key>teamID</key><string>${{ secrets.APPLE_TEAM_ID }}</string>
           </dict></plist>
           PLIST
-          xcodebuild -exportArchive \
+          xcodebuild \
+            -exportArchive \
             -archivePath $RUNNER_TEMP/App.xcarchive \
             -exportPath $RUNNER_TEMP/IPA \
             -exportOptionsPlist /tmp/export.plist

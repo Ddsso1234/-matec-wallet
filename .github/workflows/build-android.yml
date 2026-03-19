@@ -1,4 +1,4 @@
-name: Build Android APK & AAB
+name: Build Android APK et AAB
 on:
   push:
     branches: [ main ]
@@ -13,10 +13,11 @@ jobs:
           distribution: temurin
           java-version: '17'
       - uses: android-actions/setup-android@v3
-      - name: Build APK + AAB
+      - name: Build APK et AAB
         run: |
           chmod +x android/gradlew
-          cd android && ./gradlew assembleDebug bundleRelease
+          cd android
+          ./gradlew assembleDebug bundleRelease
       - uses: actions/upload-artifact@v4
         with:
           name: MATEC-APK
