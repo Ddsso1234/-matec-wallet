@@ -7,3 +7,5 @@ ios/App/Pods/
 *.keystore
 build/
 .gradle/
+*.pyc
+__pycache__/
