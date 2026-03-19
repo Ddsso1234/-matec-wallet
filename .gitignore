@@ -1,0 +1,9 @@
+node_modules/
+ios/App/Pods/
+*.ipa
+*.p12
+*.mobileprovision
+.env
+*.keystore
+build/
+.gradle/

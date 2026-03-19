@@ -1,0 +1,32 @@
+{
+  "name": "matec-wallet-app",
+  "version": "1.0.0",
+  "description": "MATEC Wallet \u2014 Application Mobile iOS & Android",
+  "scripts": {
+    "build": "echo 'PWA \u2014 pas de build requis (serveur distant)'",
+    "add:android": "npx cap add android",
+    "add:ios": "npx cap add ios",
+    "sync": "npx cap sync",
+    "open:ios": "npx cap open ios",
+    "open:android": "npx cap open android",
+    "run:ios": "npx cap run ios",
+    "run:android": "npx cap run android"
+  },
+  "dependencies": {
+    "@capacitor/app": "^5.0.0",
+    "@capacitor/browser": "^5.0.0",
+    "@capacitor/core": "^5.0.0",
+    "@capacitor/haptics": "^5.0.0",
+    "@capacitor/keyboard": "^5.0.0",
+    "@capacitor/network": "^5.0.0",
+    "@capacitor/preferences": "^5.0.0",
+    "@capacitor/push-notifications": "^5.0.0",
+    "@capacitor/splash-screen": "^5.0.0",
+    "@capacitor/status-bar": "^5.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^5.0.0",
+    "@capacitor/cli": "^5.0.0",
+    "@capacitor/ios": "^5.0.0"
+  }
+}

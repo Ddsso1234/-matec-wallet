@@ -1,0 +1,53 @@
+{
+  "appId": "site.matec.app",
+  "appName": "MATEC Wallet",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "https://matec.site/my/matec-wallet",
+    "cleartext": false,
+    "allowNavigation": [
+      "matec.site",
+      "*.matec.site",
+      "187.77.168.138"
+    ]
+  },
+  "ios": {
+    "scheme": "MATEC Wallet",
+    "limitsNavigationsToAppBoundDomains": true,
+    "backgroundColor": "#0D3D0D",
+    "preferredContentMode": "mobile",
+    "scrollEnabled": true,
+    "contentInset": "always"
+  },
+  "android": {
+    "backgroundColor": "#0D3D0D",
+    "allowMixedContent": false,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "launchAutoHide": true,
+      "backgroundColor": "#0D3D0D",
+      "iosSpinnerStyle": "large",
+      "androidSpinnerStyle": "large",
+      "spinnerColor": "#F5A800",
+      "showSpinner": true,
+      "splashFullScreen": true,
+      "splashImmersive": true
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#1A6B1A"
+    },
+    "PushNotifications": {
+      "presentationOptions": [
+        "badge",
+        "sound",
+        "alert"
+      ]
+    }
+  }
+}
