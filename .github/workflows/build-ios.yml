@@ -15,52 +15,49 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Afficher la structure du projet
-        run: |
-          echo "=== Contenu du dépôt ==="
-          ls -la
-          echo "=== Dossier matec_capacitor_ios ==="
-          ls -la matec_capacitor_ios/ || echo "Dossier non trouvé"
-
-      - name: Installer les dépendances Capacitor
+      - name: Installer dépendances Capacitor
         run: |
           cd matec_capacitor_ios
-          ls -la
           npm install
+          echo "✅ npm install OK"
 
       - name: Capacitor sync iOS
         run: |
           cd matec_capacitor_ios
           npx cap sync ios
+          echo "✅ cap sync OK"
 
       - name: Installer CocoaPods
         run: |
           cd matec_capacitor_ios/ios/App
           pod install --repo-update
+          echo "✅ CocoaPods OK"
 
-      - name: Build Xcode Archive
+      - name: Build Xcode sans signature
         run: |
           cd matec_capacitor_ios
           xcodebuild \
             -workspace ios/App/App.xcworkspace \
             -scheme App \
             -configuration Release \
-            -archivePath $RUNNER_TEMP/App.xcarchive \
+            -archivePath $RUNNER_TEMP/MATEC_Wallet.xcarchive \
             archive \
-            -allowProvisioningUpdates \
-            CODE_SIGNING_ALLOWED=NO
-        continue-on-error: true
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            -allowProvisioningUpdates
+          echo "✅ Archive créée"
 
-      - name: Lister les artifacts générés
+      - name: Lister l'archive
         run: |
-          echo "=== Contenu RUNNER_TEMP ==="
-          ls -la $RUNNER_TEMP/ || echo "Vide"
-          find $RUNNER_TEMP -name "*.xcarchive" 2>/dev/null || echo "Pas d'archive"
+          echo "=== Archive ===" 
+          ls -lh $RUNNER_TEMP/
+          find $RUNNER_TEMP -name "*.xcarchive" -type d
+          echo "✅ Archive disponible"
 
-      - name: Upload archive (si créée)
+      - name: Upload archive
         uses: actions/upload-artifact@v4
         with:
-          name: MATEC-Wallet-Archive
-          path: ${{ runner.temp }}/*.xcarchive
-          retention-days: 7
-        continue-on-error: true
+          name: MATEC-Wallet-iOS-Archive
+          path: ${{ runner.temp }}/MATEC_Wallet.xcarchive
+          retention-days: 30
