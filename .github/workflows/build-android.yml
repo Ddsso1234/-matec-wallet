@@ -16,8 +16,7 @@ jobs:
       - name: Build APK + AAB
         run: |
           chmod +x android/gradlew
-          cd android
-          ./gradlew assembleDebug bundleRelease
+          cd android && ./gradlew assembleDebug bundleRelease
       - uses: actions/upload-artifact@v4
         with:
           name: MATEC-APK

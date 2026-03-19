@@ -17,7 +17,7 @@ jobs:
         run: npx cap sync ios
       - name: CocoaPods
         run: cd ios/App && pod install --repo-update
-      - name: Build & Archive
+      - name: Build Archive
         run: |
           xcodebuild -workspace ios/App/App.xcworkspace \
             -scheme App -configuration Release \
